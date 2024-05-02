@@ -87,7 +87,7 @@ const Main = () => {
     setDietaryAdvice('');
     setSupplyAmount('');
   };
-
+/*
   const handleConfirmation = async () => {
     console.log('Confirmed: ', formData);
     try {
@@ -131,6 +131,7 @@ const Main = () => {
     clearForm();
     setShowConfirmation(false);
   };
+  */
 
 return (
   <>
