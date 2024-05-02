@@ -244,13 +244,6 @@ return (
       </Button>
     </Box>
 
-    {showConfirmation && (
-      <ConfirmationScreen
-        formData={formData}
-        // ... other props you pass to ConfirmationScreen ...
-      />
-    )}
-
     {/* FooterComponent at the bottom */}
     <FooterComponent />
   </>
