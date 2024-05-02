@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import pillsImage from '../../Images/pills.jpg';
 import ConfirmationScreen from '../Confirmation/ConfirmationScreen';
 import { requestNotificationPermission } from '../NotificationService/notificationService';
-import Parse from 'parse';
+//import Parse from 'parse';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import LogoutButton from '../Logout/LogoutButton'; // Add this if LogoutButton is in another file
 import AppBar from '@mui/material/AppBar';
@@ -39,7 +39,7 @@ const Main = () => {
   const [night, setNight] = useState(false);
   const [dietaryAdvice, setDietaryAdvice] = useState('');
   const [supplyAmount, setSupplyAmount] = useState('');
-  const [showConfirmation, setShowConfirmation] = useState(false);
+ // const [showConfirmation, setShowConfirmation] = useState(false);
   const [formData, setFormData] = useState(null);
 
   useEffect(() => {
@@ -76,6 +76,7 @@ const Main = () => {
     navigate('/confirmation', { state: { formData: data } });
   };
 
+  /*
   const clearForm = () => {
     setMedicationName('');
     setBrandName('');
