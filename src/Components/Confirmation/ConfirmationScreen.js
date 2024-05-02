@@ -26,6 +26,7 @@ const ConfirmationScreen = () => {
           Medication.set(key, formData[key]);
         };
   
+        Medication.set('UID', currentUser.get('UID')); // Assuming 'UID' corresponds to 'contr_uid' you want to store in Medication
         Medication.set('createdBy', currentUser);
 
         await Medication.save();
