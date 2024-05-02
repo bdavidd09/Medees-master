@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { checkUser, loginUser } from "./AuthService";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
+//import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -28,11 +28,15 @@ const AuthLogin = () => {
   // flags in the state to watch for add/remove updates
   const [add, setAdd] = useState(false);
 
-  useEffect(() => {
-    if (checkUser()) {
-      navigate("/");
+useEffect(() => {
+  const checkAuthenticatedUser = async () => {
+    const isLoggedIn = await checkUser();
+    if (isLoggedIn) {
+      navigate("/main"); // Only navigate to "/main" if the user is logged in
     }
-  }, [navigate]);
+  };
+  checkAuthenticatedUser();
+}, [navigate]);
 
   // useEffect that run when changes are made to the state variable flags
   useEffect(() => {

@@ -1,18 +1,21 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
-import { checkUser } from "../Authentication/AuthService";
+import React, { useState, useEffect } from 'react';
+import { Navigate } from 'react-router-dom';
+import { checkUser } from '../Authentication/AuthService';
 
-// You can pass props using the spread operator to throw them on an object if there are too many to break out
-const ProtectedRoute = ({ element: Component, ...rest }) => {
-  console.log("element: ", Component);
-  
-  if (checkUser()) {
-    return <Component {...rest} />; //added rest part 4/21/24
-  } else {
-    return (
-    <Navigate to="/auth" replace />  // If user tries to go to a protected route without authentication, it will reroute to the /auth route 
-    );
+const ProtectedRoute = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+
+  useEffect(() => {
+    checkUser().then(isAuthenticated => {
+      setIsAuthenticated(isAuthenticated);
+    });
+  }, []);
+
+  if (isAuthenticated === null) {
+    return null; // Render nothing or a loading spinner while checking the user
   }
+
+  return isAuthenticated ? children : <Navigate to="/auth/login" replace />;
 };
 
 export default ProtectedRoute;

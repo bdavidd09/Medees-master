@@ -1,73 +1,72 @@
-import React, { useEffect, useState } from "react";
-import { checkUser, createUser } from "./AuthService";
-import { useNavigate } from "react-router-dom";
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-const defaultTheme = createTheme();
-const AuthRegister = () => {
-  const navigate = useNavigate();
-//state to store user registration data 
-  const [newUser, setNewUser] = useState({
+  import React, { useEffect, useState } from "react";
+  import { checkUser, createUser } from "./AuthService";
+  import { Link as RouterLink, useNavigate } from "react-router-dom";
+  import Avatar from '@mui/material/Avatar';
+  import Button from '@mui/material/Button';
+  import CssBaseline from '@mui/material/CssBaseline';
+  import TextField from '@mui/material/TextField';
+  import Grid from '@mui/material/Grid';
+  import Box from '@mui/material/Box';
+  import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+  import Typography from '@mui/material/Typography';
+  import Container from '@mui/material/Container';
+  import { createTheme, ThemeProvider } from '@mui/material/styles';
+  
+  const defaultTheme = createTheme();
+  
+  // Define the initial state for the newUser form outside the component
+  const initialNewUserState = {
     firstName: "",
     lastName: "",
     email: "",
     password: "",
     contr_uid: ""
-  });
-
-  // flags in the state to watch for add/remove updates
-  const [add, setAdd] = useState(false);
-
-  // redirect already authenticated users back to home
-  useEffect(() => {
-    if (checkUser()) {
-      navigate("/");
-    }
-  }, [navigate]);
-
-  // useEffect that run when changes are made to the state variable flags
-  useEffect(() => {
-    if (newUser && add) {
-      createUser(newUser).then((userCreated) => {
-        if (userCreated) {
-          alert(
-            `${userCreated.get("firstName")}, you successfully registered!`
-          );
-          navigate("/");
+  };
+  
+  const AuthRegister = () => {
+    const navigate = useNavigate();
+    // Use the initialNewUserState for the newUser state
+    const [newUser, setNewUser] = useState(initialNewUserState);
+  
+    const [add, setAdd] = useState(false);
+  
+    useEffect(() => {
+      const checkAuthentication = async () => {
+        const isLoggedIn = await checkUser();
+        if (isLoggedIn) {
+          navigate("/main");
         }
-        // TODO: redirect user to main app
-        setAdd(false);
+      };
+      checkAuthentication();
+    }, [navigate]);
+  
+    useEffect(() => {
+      if (add) {
+        createUser(newUser).then((userCreated) => {
+          if (userCreated) {
+            alert(`${userCreated.get("firstName")}, you have successfully registered!`);
+            setNewUser(initialNewUserState); // Reset newUser state to initial state using the const defined outside the component
+            navigate("/main");
+          }
+          setAdd(false);
+        });
+      }
+    }, [newUser, add, navigate]);
+  
+    const onChangeHandler = (e) => {
+      e.preventDefault();
+      const { name, value } = e.target;
+  
+      setNewUser({
+        ...newUser,
+        [name]: value
       });
-    }
-  }, [navigate, newUser, add]);
-//Handler to update state when input changes 
-  const onChangeHandler = (e) => {
-    e.preventDefault();
-    console.log(e.target);
-    const { name, value: newValue } = e.target;
-    console.log(newValue);
-
-    setNewUser({
-      ...newUser,
-      [name]: newValue
-    });
-  };
-//Handler for registration submit
-  const onSubmitHandler = (e) => {
-    e.preventDefault();
-    console.log("submitted: ", e.target);
-    setAdd(true);
-  };
+    };
+  
+    const onSubmitHandler = (e) => {
+      e.preventDefault();
+      setAdd(true);
+    };
 
   // Material UI used to improve the look of the Register page
   return (
@@ -144,10 +143,10 @@ const AuthRegister = () => {
         <TextField
           required
           fullWidth
-          name="UID"
+          name="contr_uid"
           label="UID"
-          type="UID"
-          id="UID"
+          type="text"
+          id="contr_uid"
           autoComplete="new-UID"
           value={newUser.contr_uid}
                 onChange={onChangeHandler}
@@ -165,9 +164,9 @@ const AuthRegister = () => {
 
         <Grid container justifyContent="flex-end">
           <Grid item>
-            <Link to="/auth/login" variant="body2">
+            <RouterLink to="/auth/login" variant="body2">
               {"Already have an account? Log In"}
-            </Link>
+            </RouterLink>
           </Grid>
         </Grid>
       </Box>
