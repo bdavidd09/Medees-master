@@ -45,7 +45,7 @@ const ConfirmationScreen = () => {
   
     const handleEdit = () => {
       // When editing, go back to the form with the data presented for modification
-      navigate('/', { state: { formData } }); // You might need to adjust the route here
+      navigate('/main', { state: { formData } }); // You might need to adjust the route here
     };
 
     if (!formData) {

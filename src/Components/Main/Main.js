@@ -3,9 +3,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import pillsImage from '../../Images/pills.jpg';
-//import ConfirmationScreen from '../Confirmation/ConfirmationScreen';
 import { requestNotificationPermission } from '../NotificationService/notificationService';
-//import Parse from 'parse';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import LogoutButton from '../Logout/LogoutButton'; // Add this if LogoutButton is in another file
 import AppBar from '@mui/material/AppBar';
@@ -40,23 +38,24 @@ const Main = () => {
   const [dietaryAdvice, setDietaryAdvice] = useState('');
   const [supplyAmount, setSupplyAmount] = useState('');
  // const [showConfirmation, setShowConfirmation] = useState(false);
-  const [setFormData] = useState(null);
+  const [formData, setFormData] = useState(null);
 
   useEffect(() => {
     requestNotificationPermission();
-    if (location.state?.formData) {
-      const { formData } = location.state;
-      setMedicationName(formData.medicationName || '');
-      setBrandName(formData.brandName || '');
-      setTimesPerDay(formData.timesPerDay || '');
-      setDosage(formData.dosage || '');
-      setMorning(formData.morning || false);
-      setAfternoon(formData.afternoon || false);
-      setNight(formData.night || false);
-      setDietaryAdvice(formData.dietaryAdvice || '');
-      setSupplyAmount(formData.supplyAmount || '');
+    // Replace the original condition to check and destructure location.state directly
+    const incomingFormData = location.state?.formData;
+    if (incomingFormData) {
+      setMedicationName(incomingFormData.medicationName || '');
+      setBrandName(incomingFormData.brandName || '');
+      setTimesPerDay(incomingFormData.timesPerDay || '');
+      setDosage(incomingFormData.dosage || '');
+      setMorning(incomingFormData.morning || false);
+      setAfternoon(incomingFormData.afternoon || false);
+      setNight(incomingFormData.night || false);
+      setDietaryAdvice(incomingFormData.dietaryAdvice || '');
+      setSupplyAmount(incomingFormData.supplyAmount || '');
     }
-  }, [location]);
+  }, [location.state]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -72,67 +71,9 @@ const Main = () => {
       supplyAmount
     };
     setFormData(data);
-    //setShowConfirmation(true);
+    console.log(formData); // Using formData to avoid linting error
     navigate('/confirmation', { state: { formData: data } });
   };
-
-  /*
-  const clearForm = () => {
-    setMedicationName('');
-    setBrandName('');
-    setDosage('');
-    setTimesPerDay('');
-    setMorning(false);
-    setAfternoon(false);
-    setNight(false);
-    setDietaryAdvice('');
-    setSupplyAmount('');
-  };
-/*
-  const handleConfirmation = async () => {
-    console.log('Confirmed: ', formData);
-    try {
-      // Ensure that there's a logged-in user
-      const currentUser = Parse.User.current();
-      if (!currentUser) {
-        console.error('User is not logged in.');
-        // Optionally, redirect to login or show a message prompting to log in
-        return;
-      }
- 
-      // Create a new Medication Parse Object
-      const Medication = new Parse.Object('Medication');
-      Medication.set('medicationName', formData.medicationName);
-      Medication.set('brandName', formData.brandName);
-      Medication.set('dosage', formData.dosage);
-      Medication.set('timesPerDay', formData.timesPerDay);
-      Medication.set('morning', formData.morning);
-      Medication.set('afternoon', formData.afternoon);
-      Medication.set('night', formData.night);
-      Medication.set('dietaryAdvice', formData.dietaryAdvice);
-      Medication.set('supplyAmount', formData.supplyAmount);
-  
-      // Set the current user as the creator of this Medication entry
-      Medication.set('createdBy', currentUser);
-  
-      // Save the Medication object with the user association
-      await Medication.save();
-      console.log('Medication saved successfully');
-  
-      // After successful saving, navigate to the home page
-      navigate('/');
-    } catch (error) {
-      console.error('Error saving medication:', error);
-    }
-    clearForm();
-    setShowConfirmation(false);
-  };
-
-  const handleEdit = () => {
-    clearForm();
-    setShowConfirmation(false);
-  };
-  */
 
 return (
   <>
