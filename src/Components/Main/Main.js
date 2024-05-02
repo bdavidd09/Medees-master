@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import pillsImage from '../../Images/pills.jpg';
-import ConfirmationScreen from '../Confirmation/ConfirmationScreen';
+//import ConfirmationScreen from '../Confirmation/ConfirmationScreen';
 import { requestNotificationPermission } from '../NotificationService/notificationService';
 //import Parse from 'parse';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
@@ -40,7 +40,7 @@ const Main = () => {
   const [dietaryAdvice, setDietaryAdvice] = useState('');
   const [supplyAmount, setSupplyAmount] = useState('');
  // const [showConfirmation, setShowConfirmation] = useState(false);
-  const [formData, setFormData] = useState(null);
+  const [setFormData] = useState(null);
 
   useEffect(() => {
     requestNotificationPermission();
